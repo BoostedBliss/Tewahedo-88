@@ -1,0 +1,6 @@
+{
+  "name": "Ethiopian Bible 88 Canon & Reader",
+  "description": "Interactive Ethiopian Bible reader featuring the complete 88-book canon, cross-canon comparison dashboard (Ethiopian 88 vs KJV 80 vs Protestant 66), audio narration, verse highlighting, and offline access.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

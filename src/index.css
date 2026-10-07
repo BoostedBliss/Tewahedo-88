@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Cinzel', serif;
+    --font-scripture: 'EB Garamond', serif;
+    --font-ethiopic: 'Noto Sans Ethiopic', sans-serif;
+    --font-ui: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-scripture {
+  font-family: var(--font-scripture);
+}
+
+.font-ethiopic {
+  font-family: var(--font-ethiopic);
+}
+
+.font-ui {
+  font-family: var(--font-ui);
+}
+
+/* Custom scrollbars for manuscript feel */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(24, 20, 16, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(180, 130, 60, 0.35);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(180, 130, 60, 0.6);
+}
