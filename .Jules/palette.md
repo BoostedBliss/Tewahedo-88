@@ -1,0 +1,3 @@
+## 2024-03-01 - Icon Button Accessibility
+**Learning:** In this repo, developers have been using HTML `title` attributes for tooltips on icon-only buttons instead of proper `aria-label` attributes. This provides visual hints for mouse users but fails to announce the button's purpose clearly for screen reader users.
+**Action:** When working on components with icon-only interactive elements in this repo, verify and ensure that `aria-label` is always included alongside or instead of `title` attributes to maintain screen reader accessibility. Also leverage `aria-pressed` or `aria-live` where applicable for state feedback.

@@ -118,10 +118,11 @@ export const DailyVerseCard: React.FC<DailyVerseCardProps> = ({ onReadChapter, o
           {/* Shuffle Button */}
           <button
             onClick={handleShuffle}
-            className="p-1.5 rounded-lg bg-[#1a140f] hover:bg-[#2b2016] text-stone-300 hover:text-amber-300 border border-amber-500/20 text-xs font-medium flex items-center gap-1 transition-all"
+            className="p-1.5 rounded-lg bg-[#1a140f] hover:bg-[#2b2016] text-stone-300 hover:text-amber-300 border border-amber-500/20 text-xs font-medium flex items-center gap-1 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             title="Surface another significant verse"
+            aria-label="Shuffle and surface another significant verse"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
+            <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
             <span className="hidden sm:inline">Shuffle</span>
           </button>
         </div>
@@ -176,37 +177,41 @@ export const DailyVerseCard: React.FC<DailyVerseCardProps> = ({ onReadChapter, o
         <div className="flex items-center gap-2">
           <button
             onClick={handleSpeak}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
               isSpeaking
                 ? 'bg-amber-400 text-stone-950 animate-pulse'
                 : 'bg-amber-500/20 text-amber-300 hover:bg-amber-500 hover:text-stone-950 border border-amber-500/40'
             }`}
+            aria-pressed={isSpeaking}
           >
-            <Volume2 className="w-3.5 h-3.5" />
+            <Volume2 className="w-3.5 h-3.5" aria-hidden="true" />
             {isSpeaking ? 'Reciting...' : 'Recite Audio'}
           </button>
 
           <button
             onClick={handleCopy}
-            className="p-1.5 rounded-lg bg-[#1a140f] hover:bg-[#281e15] text-stone-300 hover:text-amber-300 border border-amber-500/20 text-xs transition-colors"
+            className="p-1.5 rounded-lg bg-[#1a140f] hover:bg-[#281e15] text-stone-300 hover:text-amber-300 border border-amber-500/20 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             title="Copy verse citation"
+            aria-label={copied ? "Copied verse citation" : "Copy verse citation"}
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" /> : <Copy className="w-3.5 h-3.5" aria-hidden="true" />}
           </button>
 
           <button
             onClick={handleBookmark}
-            className="p-1.5 rounded-lg bg-[#1a140f] hover:bg-[#281e15] text-stone-300 hover:text-amber-300 border border-amber-500/20 text-xs transition-colors"
+            className="p-1.5 rounded-lg bg-[#1a140f] hover:bg-[#281e15] text-stone-300 hover:text-amber-300 border border-amber-500/20 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             title="Bookmark verse"
+            aria-label="Bookmark verse"
+            aria-pressed={bookmarked}
           >
-            <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? 'text-amber-400 fill-current' : ''}`} />
+            <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? 'text-amber-400 fill-current' : ''}`} aria-hidden="true" />
           </button>
         </div>
 
         {/* Read Full Chapter CTA */}
         <button
           onClick={() => onReadChapter(currentVerse.bookId, currentVerse.chapterNumber)}
-          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-stone-950 hover:bg-amber-400 transition-all shadow"
+          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-stone-950 hover:bg-amber-400 transition-all shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-950"
         >
           <BookOpen className="w-3.5 h-3.5" />
           Read Full Chapter
