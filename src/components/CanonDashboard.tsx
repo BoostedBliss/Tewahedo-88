@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Book } from '../types/canon';
 import { CANON_METRICS, CANON_SYNTHESIS_INSIGHTS } from '../data/canonData';
 import { 
@@ -30,16 +30,25 @@ export const CanonDashboard: React.FC<CanonDashboardProps> = ({ books, onSelectB
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedInsightIndex, setSelectedInsightIndex] = useState<number>(0);
 
-  const filteredBooks = books.filter((book) => {
-    const matchesFilter =
-      activeFilter === 'all' || book.canonCategory === activeFilter;
-    const matchesSearch =
-      book.englishTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.geezTitle.includes(searchTerm) ||
-      book.transliteration.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
+  // ⚡ Bolt: Memoized filtering logic to prevent recalculation on every render (e.g. tab changes)
+  // and hoisted string lowercasing outside the iteration for performance.
+  const filteredBooks = useMemo(() => {
+    const searchLower = searchTerm.toLowerCase();
+
+    return books.filter((book) => {
+      const matchesFilter = activeFilter === 'all' || book.canonCategory === activeFilter;
+      if (!matchesFilter) return false; // Early return
+
+      if (!searchLower) return true;
+
+      return (
+        book.englishTitle.toLowerCase().includes(searchLower) ||
+        book.geezTitle.includes(searchTerm) ||
+        book.transliteration.toLowerCase().includes(searchLower) ||
+        book.description.toLowerCase().includes(searchLower)
+      );
+    });
+  }, [books, activeFilter, searchTerm]);
 
   const getCanonCategoryBadge = (category: Book['canonCategory']) => {
     switch (category) {
