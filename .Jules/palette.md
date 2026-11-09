@@ -1,3 +1,3 @@
-## 2024-03-01 - Icon Button Accessibility
-**Learning:** In this repo, developers have been using HTML `title` attributes for tooltips on icon-only buttons instead of proper `aria-label` attributes. This provides visual hints for mouse users but fails to announce the button's purpose clearly for screen reader users.
-**Action:** When working on components with icon-only interactive elements in this repo, verify and ensure that `aria-label` is always included alongside or instead of `title` attributes to maintain screen reader accessibility. Also leverage `aria-pressed` or `aria-live` where applicable for state feedback.
+## 2025-02-27 - Keyboard Accessibility for Hover-Revealed Actions
+**Learning:** Actions that only appear on hover (`group-hover:opacity-100`) become invisible to keyboard users who tab through the interface.
+**Action:** When creating hover-revealed action groups, always include `focus-within:opacity-100` on the container so the actions become visible when a user tabs into any of the buttons inside it. Additionally, ensure all interactive elements have visible focus indicators (`focus-visible:ring-2`) and descriptive `aria-label` attributes if they are icon-only.
