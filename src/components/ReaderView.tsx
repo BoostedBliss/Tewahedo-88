@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Book, Chapter, Verse, Highlight, Bookmark, ReaderTheme, ReaderFont } from '../types/canon';
 import { audioNarration, ORATOR_PRESETS, OratorPreset } from '../utils/audioNarration';
 import { 
@@ -207,24 +207,27 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     }
   };
 
-  // Check existing highlights and bookmarks
-  const getVerseHighlight = (verseNum: number) => {
-    return highlights.find(
-      (h) =>
-        h.bookId === currentBook.id &&
-        h.chapterNumber === currentChapterNum &&
-        h.verseNumber === verseNum
-    );
-  };
+  // ⚡ Bolt: Memoize highlights and bookmarks for the current chapter to O(1) Maps/Sets
+  // This prevents O(n^2) array searches during the verse map render loop.
+  const chapterHighlights = useMemo(() => {
+    const map = new Map<number, Highlight>();
+    for (const h of highlights) {
+      if (h.bookId === currentBook.id && h.chapterNumber === currentChapterNum) {
+        map.set(h.verseNumber, h);
+      }
+    }
+    return map;
+  }, [highlights, currentBook.id, currentChapterNum]);
 
-  const isVerseBookmarked = (verseNum: number) => {
-    return bookmarks.some(
-      (b) =>
-        b.bookId === currentBook.id &&
-        b.chapterNumber === currentChapterNum &&
-        b.verseNumber === verseNum
-    );
-  };
+  const chapterBookmarks = useMemo(() => {
+    const set = new Set<number>();
+    for (const b of bookmarks) {
+      if (b.bookId === currentBook.id && b.chapterNumber === currentChapterNum && b.verseNumber !== undefined) {
+        set.add(b.verseNumber);
+      }
+    }
+    return set;
+  }, [bookmarks, currentBook.id, currentChapterNum]);
 
   const handleVerseHighlight = (
     color: Highlight['color'],
@@ -585,8 +588,8 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
         {/* Verses Reading Body */}
         <div className={`space-y-6 ${getFontFamilyClass()}`} style={{ fontSize: `${fontSize}px` }}>
           {currentChapter.verses.map((verse) => {
-            const highlight = getVerseHighlight(verse.number);
-            const bookmarked = isVerseBookmarked(verse.number);
+            const highlight = chapterHighlights.get(verse.number);
+            const bookmarked = chapterBookmarks.has(verse.number);
             const isReciting = activeRecitingVerse === verse.number;
 
             return (
