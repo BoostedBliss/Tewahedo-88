@@ -1,3 +1,3 @@
-## 2024-03-01 - Icon Button Accessibility
-**Learning:** In this repo, developers have been using HTML `title` attributes for tooltips on icon-only buttons instead of proper `aria-label` attributes. This provides visual hints for mouse users but fails to announce the button's purpose clearly for screen reader users.
-**Action:** When working on components with icon-only interactive elements in this repo, verify and ensure that `aria-label` is always included alongside or instead of `title` attributes to maintain screen reader accessibility. Also leverage `aria-pressed` or `aria-live` where applicable for state feedback.
+## 2026-11-10 - Interactive Elements Visibility for Keyboard Users
+**Learning:** The pattern `group-hover:opacity-0` combined with `group-hover:opacity-100` hides interactive elements completely for keyboard users, making them inaccessible during tabbing. This pattern was found in ReaderView's verse action buttons.
+**Action:** Always pair `opacity-0` with `focus-within:opacity-100` on the container so that when a keyboard user tabs into the hidden element, its parent becomes visible, ensuring sighted keyboard users can see the interactive elements they are focused on.
