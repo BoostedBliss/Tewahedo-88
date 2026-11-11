@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Book, Chapter, Verse, Highlight, Bookmark, ReaderTheme, ReaderFont } from '../types/canon';
 import { audioNarration, ORATOR_PRESETS, OratorPreset } from '../utils/audioNarration';
 import { 
@@ -207,23 +207,35 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     }
   };
 
+  // ⚡ Bolt: Memoize highlights and bookmarks into O(1) maps for the current chapter
+  // This prevents O(N*M) lookups during rendering of large chapters where N is verses and M is highlights/bookmarks.
+  const chapterHighlightsMap = useMemo(() => {
+    const map = new Map<number, Highlight>();
+    for (const h of highlights) {
+      if (h.bookId === currentBook.id && h.chapterNumber === currentChapterNum) {
+        map.set(h.verseNumber, h);
+      }
+    }
+    return map;
+  }, [highlights, currentBook.id, currentChapterNum]);
+
+  const chapterBookmarksSet = useMemo(() => {
+    const set = new Set<number>();
+    for (const b of bookmarks) {
+      if (b.bookId === currentBook.id && b.chapterNumber === currentChapterNum && b.verseNumber !== undefined) {
+        set.add(b.verseNumber);
+      }
+    }
+    return set;
+  }, [bookmarks, currentBook.id, currentChapterNum]);
+
   // Check existing highlights and bookmarks
   const getVerseHighlight = (verseNum: number) => {
-    return highlights.find(
-      (h) =>
-        h.bookId === currentBook.id &&
-        h.chapterNumber === currentChapterNum &&
-        h.verseNumber === verseNum
-    );
+    return chapterHighlightsMap.get(verseNum);
   };
 
   const isVerseBookmarked = (verseNum: number) => {
-    return bookmarks.some(
-      (b) =>
-        b.bookId === currentBook.id &&
-        b.chapterNumber === currentChapterNum &&
-        b.verseNumber === verseNum
-    );
+    return chapterBookmarksSet.has(verseNum);
   };
 
   const handleVerseHighlight = (
