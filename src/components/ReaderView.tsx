@@ -613,9 +613,9 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
                   {/* Recite this verse */}
                   <button
                     onClick={() => handlePlaySingleVerse(verse)}
-                    className="p-1 hover:bg-amber-500/20 text-amber-300 rounded focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
+                    className="p-1 hover:bg-amber-500/20 text-amber-300 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
                     title="Recite this verse"
-                    aria-label="Recite this verse"
+                    aria-label={`Recite verse ${verse.number}`}
                   >
                     <Volume2 className="w-3.5 h-3.5" />
                   </button>
@@ -624,27 +624,27 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
                   <div className="flex items-center gap-0.5 px-1 border-x border-amber-500/20">
                     <button
                       onClick={() => handleVerseHighlight('gold', verse)}
-                      className="w-3.5 h-3.5 rounded-full bg-amber-400 hover:scale-125 transition-transform focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
+                      className="w-3.5 h-3.5 rounded-full bg-amber-400 hover:scale-125 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-[#221b14] focus-visible:ring-amber-500"
                       title="Gold highlight"
-                      aria-label="Gold highlight"
+                      aria-label="Highlight gold"
                     />
                     <button
                       onClick={() => handleVerseHighlight('red', verse)}
-                      className="w-3.5 h-3.5 rounded-full bg-red-500 hover:scale-125 transition-transform focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
+                      className="w-3.5 h-3.5 rounded-full bg-red-500 hover:scale-125 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-[#221b14] focus-visible:ring-amber-500"
                       title="Crimson highlight"
-                      aria-label="Crimson highlight"
+                      aria-label="Highlight crimson"
                     />
                     <button
                       onClick={() => handleVerseHighlight('green', verse)}
-                      className="w-3.5 h-3.5 rounded-full bg-emerald-500 hover:scale-125 transition-transform focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
+                      className="w-3.5 h-3.5 rounded-full bg-emerald-500 hover:scale-125 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-[#221b14] focus-visible:ring-amber-500"
                       title="Sinai green highlight"
-                      aria-label="Sinai green highlight"
+                      aria-label="Highlight sinai green"
                     />
                     <button
                       onClick={() => handleVerseHighlight('blue', verse)}
-                      className="w-3.5 h-3.5 rounded-full bg-sky-500 hover:scale-125 transition-transform focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
+                      className="w-3.5 h-3.5 rounded-full bg-sky-500 hover:scale-125 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-[#221b14] focus-visible:ring-amber-500"
                       title="Lapis blue highlight"
-                      aria-label="Lapis blue highlight"
+                      aria-label="Highlight lapis blue"
                     />
                   </div>
 
@@ -654,9 +654,10 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
                       setSelectedVerseForAction(verse);
                       setShowBookmarkModal(true);
                     }}
-                    className={`p-1 rounded focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none ${bookmarked ? 'text-amber-400' : 'text-stone-400 hover:text-amber-300'}`}
+                    className={`p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${bookmarked ? 'text-amber-400' : 'text-stone-400 hover:text-amber-300'}`}
                     title="Add Bookmark with Note"
-                    aria-label="Add Bookmark with Note"
+                    aria-label={`Bookmark verse ${verse.number}`}
+                    aria-pressed={bookmarked}
                   >
                     <BookmarkIcon className={`w-3.5 h-3.5 ${bookmarked ? 'fill-current' : ''}`} />
                   </button>
@@ -664,9 +665,9 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
                   {/* Copy Verse */}
                   <button
                     onClick={() => handleCopyVerse(verse)}
-                    className="p-1 hover:bg-amber-500/20 text-stone-400 hover:text-amber-300 rounded focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
+                    className="p-1 hover:bg-amber-500/20 text-stone-400 hover:text-amber-300 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
                     title="Copy Verse Citation"
-                    aria-label="Copy Verse Citation"
+                    aria-label={copyFeedback === verse.number ? `Copied verse ${verse.number}` : `Copy verse ${verse.number}`}
                   >
                     {copyFeedback === verse.number ? (
                       <Check className="w-3.5 h-3.5 text-emerald-400" />
