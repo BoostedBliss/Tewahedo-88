@@ -130,7 +130,7 @@ export default function App() {
       }
 
       const newHighlight: Highlight = {
-        id: `hl-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        id: `hl-${Date.now()}-${crypto.randomUUID()}`,
         bookId,
         chapterNumber: chapterNum,
         verseNumber: verseNum,
@@ -153,7 +153,7 @@ export default function App() {
     const title = foundBook ? foundBook.englishTitle : bookId;
 
     const newBookmark: Bookmark = {
-      id: `bm-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      id: `bm-${Date.now()}-${crypto.randomUUID()}`,
       bookId,
       chapterNumber: chapterNum,
       verseNumber: verseNum,
