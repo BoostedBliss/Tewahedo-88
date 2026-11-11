@@ -1,3 +1,4 @@
-## 2025-02-28 - O(N*M) Lookup Bottleneck in React Render Loop
-**Learning:** Found a specific performance bottleneck where large global state arrays (like `highlights` or `bookmarks`) were being iteratively searched inside a `map` loop for every verse rendered in a chapter. This nested O(N*M) iteration causes unnecessary rendering delays on large text blocks.
-**Action:** Always memoize global arrays into O(1) structures (`Map`, `Set`) at the top of the component render cycle before iterating through long lists of items that need to perform lookups against those arrays.
+
+## 2024-05-19 - Deep Text Search Blocking Main Thread
+**Learning:** In React components with deep textual searching (like `SearchModal.tsx` scanning all books, chapters, and verses), executing the filtering array methods synchronously on every keystroke blocks the main thread, causing severe input lag.
+**Action:** Use `useDeferredValue` combined with `useMemo` for heavy client-side filtering instead of custom debounce logic. This keeps the input highly responsive by letting React interrupt the rendering of the heavy list when the user continues typing. Always pair this with a visual indicator (like an `opacity-50` class) when `query !== deferredQuery` to show the user that results are loading.
