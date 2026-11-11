@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useDeferredValue, useMemo } from 'react';
 import { Book } from '../types/canon';
 import { Search, BookOpen, Sparkles, Layers, ArrowRight, X } from 'lucide-react';
 
@@ -16,6 +16,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onSelectBookAndChapter,
 }) => {
   const [query, setQuery] = useState('');
+  const deferredQuery = useDeferredValue(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -28,20 +29,26 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   if (!isOpen) return null;
 
-  const results = books.filter((b) => {
-    if (!query.trim()) return false;
-    const q = query.toLowerCase();
-    return (
-      b.englishTitle.toLowerCase().includes(q) ||
-      b.geezTitle.includes(q) ||
-      b.transliteration.toLowerCase().includes(q) ||
-      b.categoryLabel.toLowerCase().includes(q) ||
-      b.description.toLowerCase().includes(q) ||
-      b.sampleChapters.some((c) =>
-        c.verses.some((v) => v.text.toLowerCase().includes(q) || (v.geezText && v.geezText.includes(q)))
-      )
-    );
-  });
+  // ⚡ Bolt: Using useDeferredValue and useMemo prevents typing from lagging
+  // during deep text searches across all books, chapters, and verses.
+  const results = useMemo(() => {
+    if (!deferredQuery.trim()) return [];
+    const q = deferredQuery.toLowerCase();
+    return books.filter((b) => {
+      return (
+        b.englishTitle.toLowerCase().includes(q) ||
+        b.geezTitle.includes(q) ||
+        b.transliteration.toLowerCase().includes(q) ||
+        b.categoryLabel.toLowerCase().includes(q) ||
+        b.description.toLowerCase().includes(q) ||
+        b.sampleChapters.some((c) =>
+          c.verses.some((v) => v.text.toLowerCase().includes(q) || (v.geezText && v.geezText.includes(q)))
+        )
+      );
+    });
+  }, [deferredQuery, books]);
+
+  const isStale = query !== deferredQuery;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-start justify-center p-4 pt-16 sm:pt-24 animate-in fade-in duration-150">
@@ -109,7 +116,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         {/* Results List */}
         {query && (
-          <div className="max-h-96 overflow-y-auto p-4 space-y-2">
+          <div className={`max-h-96 overflow-y-auto p-4 space-y-2 transition-opacity duration-150 ${isStale ? 'opacity-50' : 'opacity-100'}`}>
             {results.length > 0 ? (
               results.map((b) => (
                 <button
