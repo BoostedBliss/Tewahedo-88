@@ -207,9 +207,9 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     }
   };
 
-  // ⚡ Bolt: Memoize highlights and bookmarks into O(1) maps for the current chapter
-  // This prevents O(N*M) lookups during rendering of large chapters where N is verses and M is highlights/bookmarks.
-  const chapterHighlightsMap = useMemo(() => {
+  // ⚡ Bolt: Memoize highlights and bookmarks for the current chapter to O(1) Maps/Sets
+  // This prevents O(n^2) array searches during the verse map render loop.
+  const chapterHighlights = useMemo(() => {
     const map = new Map<number, Highlight>();
     for (const h of highlights) {
       if (h.bookId === currentBook.id && h.chapterNumber === currentChapterNum) {
@@ -219,7 +219,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     return map;
   }, [highlights, currentBook.id, currentChapterNum]);
 
-  const chapterBookmarksSet = useMemo(() => {
+  const chapterBookmarks = useMemo(() => {
     const set = new Set<number>();
     for (const b of bookmarks) {
       if (b.bookId === currentBook.id && b.chapterNumber === currentChapterNum && b.verseNumber !== undefined) {
@@ -228,15 +228,6 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
     }
     return set;
   }, [bookmarks, currentBook.id, currentChapterNum]);
-
-  // Check existing highlights and bookmarks
-  const getVerseHighlight = (verseNum: number) => {
-    return chapterHighlightsMap.get(verseNum);
-  };
-
-  const isVerseBookmarked = (verseNum: number) => {
-    return chapterBookmarksSet.has(verseNum);
-  };
 
   const handleVerseHighlight = (
     color: Highlight['color'],
@@ -597,8 +588,8 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
         {/* Verses Reading Body */}
         <div className={`space-y-6 ${getFontFamilyClass()}`} style={{ fontSize: `${fontSize}px` }}>
           {currentChapter.verses.map((verse) => {
-            const highlight = getVerseHighlight(verse.number);
-            const bookmarked = isVerseBookmarked(verse.number);
+            const highlight = chapterHighlights.get(verse.number);
+            const bookmarked = chapterBookmarks.has(verse.number);
             const isReciting = activeRecitingVerse === verse.number;
 
             return (
