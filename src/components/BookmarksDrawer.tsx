@@ -84,6 +84,7 @@ export const BookmarksDrawer: React.FC<BookmarksDrawerProps> = ({
             <button
               onClick={onClose}
               className="p-1 rounded-lg text-stone-400 hover:text-stone-200 hover:bg-white/5"
+              aria-label="Close bookmarks drawer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -131,6 +132,7 @@ export const BookmarksDrawer: React.FC<BookmarksDrawerProps> = ({
               onClick={handleExportNotes}
               className="p-1.5 rounded-lg bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 border border-amber-500/30 text-xs font-semibold flex items-center gap-1"
               title="Export saved journal to JSON"
+              aria-label="Export saved journal to JSON"
             >
               <Download className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Export</span>
@@ -169,6 +171,7 @@ export const BookmarksDrawer: React.FC<BookmarksDrawerProps> = ({
                           }}
                           className="p-1.5 rounded-lg bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-stone-950 text-xs font-semibold transition-all"
                           title="Jump to verse in Reader"
+                          aria-label="Jump to verse in Reader"
                         >
                           <ArrowRight className="w-3.5 h-3.5" />
                         </button>
@@ -176,6 +179,7 @@ export const BookmarksDrawer: React.FC<BookmarksDrawerProps> = ({
                           onClick={() => onDeleteBookmark(bookmark.id)}
                           className="p-1.5 rounded-lg text-stone-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
                           title="Remove bookmark"
+                          aria-label="Remove bookmark"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -233,6 +237,7 @@ export const BookmarksDrawer: React.FC<BookmarksDrawerProps> = ({
                         }}
                         className="p-1.5 rounded-lg bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-stone-950 text-xs font-semibold transition-all"
                         title="Jump to verse in Reader"
+                        aria-label="Jump to verse in Reader"
                       >
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
@@ -240,6 +245,7 @@ export const BookmarksDrawer: React.FC<BookmarksDrawerProps> = ({
                         onClick={() => onDeleteHighlight(highlight.id)}
                         className="p-1.5 rounded-lg text-stone-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
                         title="Remove highlight"
+                        aria-label="Remove highlight"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
